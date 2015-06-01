@@ -24,9 +24,9 @@ There exist three specific configurations for this plugin.
 
 An example may be like below:
 
->[BeanstalkdOutput]
->message_matcher = "TRUE"
->encoder = "PayloadEncoder"
->beanstalkd_host = "127.0.0.1"
->beanstalkd_port = "11000"
->beanstalkd_tube = "default"
+>[BeanstalkdOutput]<br/>
+>message_matcher = "TRUE"<br/>
+>encoder = "PayloadEncoder"<br/>
+>beanstalkd_host = "127.0.0.1"<br/>
+>beanstalkd_port = "11000"<br/>
+>beanstalkd_tube = "default"<br/>
