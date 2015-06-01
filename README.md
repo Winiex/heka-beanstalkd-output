@@ -4,9 +4,11 @@ This is a simple heka output plugin writes message to beanstalkd queues.
 
 ##Dependencies
 
-You need to install [kr's golang binding library for beanstalk](https://github.com/kr/beanstalk):
+You need to install [kr's golang binding library for beanstalk](https://github.com/kr/beanstalk).
 
->go get github.com/kr/beanstalk
+To include this library in building process, you need to add the line below in $HEKA_ROOT/cmake/externals.cmake:
+
+>git_clone(https://github.com/kr/beanstalk.git master)
 
 ##How to install
 
