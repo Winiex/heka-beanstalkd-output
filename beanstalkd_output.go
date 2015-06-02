@@ -42,7 +42,7 @@ func (bo *BeanstalkdOutput) Run(or p.OutputRunner, h p.PluginHelper) (err error)
 	for pack := range inChan {
 		outBytes, err := or.Encode(pack)
 
-		if e != nil {
+		if err != nil {
 			or.LogError(e)
 			continue
 		}
