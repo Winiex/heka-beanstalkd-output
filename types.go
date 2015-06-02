@@ -24,6 +24,17 @@ func (bt *BeanstalkdTube) Reserve(timeout time.Duration) (id uint64, body []byte
 	return
 }
 
+func (bt *BeanstalkdTube) Close() error {
+	err := bt.conn.Close()
+
+	if err != nil {
+		return err
+	}
+
+	bt.tube = nil
+	bt.tubeset = nil
+}
+
 func beanstalkdDial(host, port string) (*beanstalk.Conn, error) {
 	uri := fmt.Sprintf("%s:%s", host, port)
 	c, err := beanstalk.Dial("tcp", uri)

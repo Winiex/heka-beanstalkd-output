@@ -26,13 +26,6 @@ func (bo *BeanstalkdOutput) ConfigStruct() interface{} {
 
 func (bo *BeanstalkdOutput) Init(config interface{}) (err error) {
 	conf := config.(*BeanstalkdOutputConfig)
-	newTube, err := NewBeansTalkdTube(conf.Host, conf.Port, conf.Tube)
-
-	if err != nil {
-		return
-	}
-
-	bo.beansTube = newTube
 	bo.config = conf
 
 	return
@@ -52,7 +45,6 @@ func (bo *BeanstalkdOutput) Run(or p.OutputRunner, h p.PluginHelper) (err error)
 
 	for pack := range inChan {
 		outBytes, e = or.Encode(pack)
-		pack.Recycle()
 		if e != nil {
 			or.LogError(e)
 			continue
@@ -62,7 +54,17 @@ func (bo *BeanstalkdOutput) Run(or p.OutputRunner, h p.PluginHelper) (err error)
 			continue
 		}
 
+		newTube, err := NewBeansTalkdTube(conf.Host, conf.Port, conf.Tube)
+
+		if err != nil {
+			continue
+		}
+
 		bo.beansTube.Put(outBytes, 0, 0, 3)
+
+		newTube.Close()
+
+		pack.Recycle()
 	}
 
 	return
