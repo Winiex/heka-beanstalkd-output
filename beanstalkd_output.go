@@ -12,8 +12,7 @@ type BeanstalkdOutputConfig struct {
 }
 
 type BeanstalkdOutput struct {
-	config    *BeanstalkdOutputConfig
-	beansTube *BeanstalkdTube
+	config *BeanstalkdOutputConfig
 }
 
 func (bo *BeanstalkdOutput) ConfigStruct() interface{} {
@@ -36,15 +35,13 @@ func (bo *BeanstalkdOutput) Run(or p.OutputRunner, h p.PluginHelper) (err error)
 		return errors.New("Encoder must be specified.")
 	}
 
-	var (
-		e        error
-		outBytes []byte
-	)
+	var outBytes []byte
 
 	inChan := or.InChan()
 
 	for pack := range inChan {
-		outBytes, e = or.Encode(pack)
+		outBytes, err := or.Encode(pack)
+
 		if e != nil {
 			or.LogError(e)
 			continue
@@ -54,7 +51,7 @@ func (bo *BeanstalkdOutput) Run(or p.OutputRunner, h p.PluginHelper) (err error)
 			continue
 		}
 
-		newTube, err := NewBeansTalkdTube(
+		tube, err := NewBeansTalkdTube(
 			bo.config.Host, bo.config.Port, bo.config.Tube,
 		)
 
@@ -62,9 +59,8 @@ func (bo *BeanstalkdOutput) Run(or p.OutputRunner, h p.PluginHelper) (err error)
 			continue
 		}
 
-		bo.beansTube.Put(outBytes, 0, 0, 3)
-
-		newTube.Close()
+		tube.Put(outBytes, 0, 0, 3)
+		tube.Close()
 
 		pack.Recycle()
 	}
