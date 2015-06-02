@@ -54,7 +54,9 @@ func (bo *BeanstalkdOutput) Run(or p.OutputRunner, h p.PluginHelper) (err error)
 			continue
 		}
 
-		newTube, err := NewBeansTalkdTube(conf.Host, conf.Port, conf.Tube)
+		newTube, err := NewBeansTalkdTube(
+			bo.conf.Host, bo.conf.Port, bo.conf.Tube,
+		)
 
 		if err != nil {
 			continue

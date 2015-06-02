@@ -31,8 +31,7 @@ func (bt *BeanstalkdTube) Close() error {
 		return err
 	}
 
-	bt.tube = nil
-	bt.tubeset = nil
+	return nil
 }
 
 func beanstalkdDial(host, port string) (*beanstalk.Conn, error) {
