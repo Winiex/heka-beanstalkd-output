@@ -62,7 +62,11 @@ func (bo *BeanstalkdOutput) Run(or p.OutputRunner, h p.PluginHelper) (err error)
 			continue
 		}
 
-		bo.beansTube.Put(outBytes, 0, 0, 3)
+		_, e = bo.beansTube.Put(outBytes, 0, 0, 5)
+
+		if e != nil {
+			break
+		}
 	}
 
 	return
